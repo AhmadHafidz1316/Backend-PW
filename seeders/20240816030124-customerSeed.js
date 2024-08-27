@@ -16,7 +16,7 @@ module.exports = {
       [
         {
           id: v4(),
-          nik:1231234567891011,
+          nik: "1231234567891011",
           nama: "Salma Hayya Rahman",
           tmpt_tgl_lahir: "BOGOR, 16-08-2006",
           jk: "PEREMPUAN",
@@ -29,12 +29,12 @@ module.exports = {
           pekerjaan: "PELAJAR/MAHASISWA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik:1231234567891022,
+          nik: "1231234567891012",
           nama: "Fajar Prasetyo",
           tmpt_tgl_lahir: "BANDUNG, 10-02-1998",
           jk: "LAKI-LAKI",
@@ -47,12 +47,12 @@ module.exports = {
           pekerjaan: "SWASTA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891033,
+          nik: "1231234567891013",
           nama: "Andi Setiawan",
           tmpt_tgl_lahir: "JAKARTA, 25-12-1985",
           jk: "LAKI-LAKI",
@@ -65,12 +65,12 @@ module.exports = {
           pekerjaan: "PNS",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891044,
+          nik: "1231234567891014",
           nama: "Aulia Fitriani",
           tmpt_tgl_lahir: "SURABAYA, 01-11-2002",
           jk: "PEREMPUAN",
@@ -83,12 +83,12 @@ module.exports = {
           pekerjaan: "PELAJAR/MAHASISWA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891055,
+          nik: "1231234567891015",
           nama: "Budi Santoso",
           tmpt_tgl_lahir: "YOGYAKARTA, 15-07-1990",
           jk: "LAKI-LAKI",
@@ -101,12 +101,12 @@ module.exports = {
           pekerjaan: "WIRAUSAHA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891066,
+          nik: "1231234567891016",
           nama: "Citra Lestari",
           tmpt_tgl_lahir: "MALANG, 22-05-1995",
           jk: "PEREMPUAN",
@@ -119,12 +119,12 @@ module.exports = {
           pekerjaan: "PEGAWAI SWASTA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891077,
+          nik: "1231234567891017",
           nama: "Dewi Anggraini",
           tmpt_tgl_lahir: "SEMARANG, 18-03-1992",
           jk: "PEREMPUAN",
@@ -137,12 +137,12 @@ module.exports = {
           pekerjaan: "GURU",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891088,
+          nik: "1231234567891018",
           nama: "Eko Saputra",
           tmpt_tgl_lahir: "MEDAN, 12-09-1987",
           jk: "LAKI-LAKI",
@@ -155,12 +155,12 @@ module.exports = {
           pekerjaan: "PNS",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891099,
+          nik: "1231234567891019",
           nama: "Fauzan Hakim",
           tmpt_tgl_lahir: "PALEMBANG, 30-01-1993",
           jk: "LAKI-LAKI",
@@ -173,12 +173,12 @@ module.exports = {
           pekerjaan: "WIRAUSAHA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           id: v4(),
-          nik: 1231234567891100,
+          nik: "1231234567891020",
           nama: "Gita Puspitasari",
           tmpt_tgl_lahir: "MAKASSAR, 27-08-1996",
           jk: "PEREMPUAN",
@@ -191,9 +191,9 @@ module.exports = {
           pekerjaan: "PEGAWAI SWASTA",
           warga: "WNI",
           buyer_type_id: customerId,
-          createdAt : new Date(),
-          updatedAt : new Date()
-        }
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

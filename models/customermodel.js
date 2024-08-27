@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, where } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class customerModel extends Model {
     /**
@@ -142,6 +142,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "customerModel",
+      hooks : {
+        beforeCreate: async(customer) => {
+          if(!customer.buyer_type_id) {
+            const buyerType = await sequelize.models.buyer_type.findOne({where : {name : 'UMKM'}})
+            customer.buyer_type_id = buyerType.id
+          }
+        }
+      }
     }
   );
   return customerModel;
