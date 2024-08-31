@@ -81,3 +81,7 @@ exports.Login = async (req, res) => {
     token: token,
   });
 };
+
+exports.Logout = async (req,res) => {
+
+}

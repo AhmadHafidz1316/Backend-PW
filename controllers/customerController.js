@@ -1,8 +1,16 @@
-const { customerModel } = require("../models");
+const { customerModel, buyer_type } = require("../models");
 
 exports.getCustomer = async (req, res) => {
   try {
-    const customer = await customerModel.findAll();
+    const customer = await customerModel.findAll({
+      include: [
+        {
+          model: buyer_type, // Menggunakan model buyerType yang diimport
+          as: 'buyer_type',
+          attributes: ['id', 'name'],  // Ambil hanya ID dan nama buyer_type
+        },
+      ],
+    });
 
     if (customer.length === 0) {
       return res.status(404).json({
@@ -13,9 +21,9 @@ exports.getCustomer = async (req, res) => {
     }
 
     return res.status(200).json({
-      status : 200,
+      status: 200,
       message: "Data Test",
-      data : customer
+      data: customer,
     });
   } catch (error) {
     console.log(error);
@@ -56,7 +64,7 @@ exports.storeCustomer = async (req, res) => {
       agama,
       status_perkawinan,
       pekerjaan,
-      warga
+      warga,
     });
 
     res.status(201).json({
@@ -68,39 +76,64 @@ exports.storeCustomer = async (req, res) => {
     return res.status(400).json({
       status: 400,
       message: "Bad Request",
-      error
-    })
+      error,
+    });
   }
 };
 
-  exports.updateCustomer = async (req,res) => {
-    try {
-      const id = req.params.id
+exports.updateCustomer = async (req, res) => {
+  try {
+    const id = req.params.id;
 
-      const [updated] = await customerModel.update(req.body, {
-        where : {id : id}
-      })
+    const [updated] = await customerModel.update(req.body, {
+      where: { id: id },
+    });
 
-      if (updated) {
-        const updatedCustomer = await customerModel.findByPk(id)
+    if (updated) {
+      const updatedCustomer = await customerModel.findByPk(id);
 
-        return res.status(200).json({
-          status: 200,
-          message: "Data Updated",
-          data: updatedCustomer
-        })
-      }
+      return res.status(200).json({
+        status: 200,
+        message: "Data Updated",
+        data: updatedCustomer,
+      });
+    }
 
+    return res.status(404).json({
+      status: 404,
+      message: "Data not found",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: "Bad Request",
+      error,
+    });
+  }
+};
+
+exports.deleteCustomer = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const idCustomer= await customerModel.findByPk(id);
+
+    if (!idCustomer) {
       return res.status(404).json({
         status: 404,
-        message: "Data not found"
-      })
-
-    } catch (error) {
-      return res.status(400).json({
-        status: 400,
-        message: "Bad Request",
-        error
-      })
+        message: "Data Not Found",
+      });
     }
-  }
+
+    await customerModel.destroy({
+      where: {
+        id,
+      },
+    });
+    return res.status(200).json({
+      status: 200,
+      message: "Data Deleted",
+      data: idCustomer,
+    });
+  } catch (error) {}
+};

@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.buyer_type, {
+        foreignKey: 'buyer_type_id',
+        as: 'buyer_type',
+      });
     }
   }
   customerModel.init(
