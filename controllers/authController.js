@@ -75,13 +75,10 @@ exports.Login = async (req, res) => {
   const token = signToken(userData._id);
 
   return res.status(200).json({
-    status: 201,
+    status: 200,
     message: "Successfully Login",
     data: userData,
     token: token,
   });
 };
 
-exports.Logout = async (req,res) => {
-
-}

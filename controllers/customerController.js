@@ -135,5 +135,12 @@ exports.deleteCustomer = async (req, res) => {
       message: "Data Deleted",
       data: idCustomer,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: "Bad Request",
+      error
+    })
+  }
 };
+
