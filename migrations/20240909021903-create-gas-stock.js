@@ -14,10 +14,17 @@ module.exports = {
         allowNull: false
       },
       restock_date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false
       },
       restocked_by: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        references: {
+          model : "AdminModels",
+          key: "id"
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
       },
       createdAt: {
         allowNull: false,

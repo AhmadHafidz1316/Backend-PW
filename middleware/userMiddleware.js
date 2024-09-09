@@ -1,36 +1,49 @@
-require("dotenv").config()
-const jwt = require("jsonwebtoken")
-const { AdminModel} = require("../models")
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const { AdminModel } = require("../models");
 
 exports.authMiddleware = async (req, res, next) => {
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
   }
 
   if (!token) {
-    return next(
-      res.status(401).json({
-        status: 401,
-        message: "Authorization Undifined",
-      })
-    );
+    return res.status(401).json({
+      status: 401,
+      message: 'Authorization Token Undefined',
+    });
   }
+
+  console.log('Received Token:', token);
 
   let decoded;
   try {
-    decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded Token:', decoded);
   } catch (error) {
-    return next(
-      res.status(401).json({
-        error: error,
-        message: "Undifined Token",
-      })
-    );
+    console.error('Error decoding token:', error);
+    return res.status(401).json({
+      status: 401,
+      message: 'Invalid Token',
+    });
   }
 
-  next();
+  try {
+    const user = await AdminModel.findByPk(decoded.id);
+    console.log('User Found:', user);
+    if (!user) {
+      return res.status(401).json({
+        status: 401,
+        message: 'User not found',
+      });
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: 'Error retrieving user',
+    });
+  }
 };

@@ -11,15 +11,37 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.AdminModel, {
+        foreignKey: 'restocked_by',
+        as : 'AdminModel'
+      })
     }
   }
   gas_stock.init({
-    current_stock: DataTypes.INTEGER,
+    stock_id : {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    current_stock: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     restock_date: DataTypes.DATE,
-    restocked_by: DataTypes.INTEGER
+    restocked_by: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'gas_stock',
+    hooks: {
+      beforeCreate: async(gas) => {
+        if(!gas.restock_date) {
+          gas.restock_date = new Date()
+        }
+      }
+    }
   });
   return gas_stock;
 };

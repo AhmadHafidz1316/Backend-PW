@@ -31,7 +31,8 @@ exports.RegisterAdmin = async (req, res) => {
       location: req.body.location,
     });
 
-    const token = signToken(newAdmin._id);
+    const token = signToken(newAdmin.id);
+
 
     return res.status(201).json({
       status: 201,
@@ -72,7 +73,8 @@ exports.Login = async (req, res) => {
     })
   }
 
-  const token = signToken(userData._id);
+  const token = signToken(userData.id);
+
 
   return res.status(200).json({
     status: 200,
