@@ -10,7 +10,7 @@ const {
   deleteCustomer,
   getIdCustomer
 } = require("../controllers/customerController");
-const { createGasStock } = require("../controllers/gasController");
+const { addGas, history, getLastStock } = require("../controllers/gasController");
 
 // admin
 router.get("/admin", getAdmin);
@@ -27,7 +27,10 @@ router.delete("/customer/:id", authMiddleware, deleteCustomer);
 router.get("/customer/:id", authMiddleware, getIdCustomer);
 
 
+
 // Gas Stock
-router.post("/add-gas", authMiddleware, createGasStock);
+router.post("/add-gas", authMiddleware, addGas);
+router.get("/gas", authMiddleware, history)
+router.get("/current-gas", authMiddleware, getLastStock)
 
 module.exports = router;
