@@ -8,9 +8,15 @@ const {
   storeCustomer,
   updateCustomer,
   deleteCustomer,
-  getIdCustomer
+  getIdCustomer,
 } = require("../controllers/customerController");
-const { addGas, history, getLastStock } = require("../controllers/gasController");
+const {
+  addGas,
+  history,
+  getLastStock,
+} = require("../controllers/gasController");
+const { getSale, storeSale } = require("../controllers/saleController");
+const { getBuyer } = require("../controllers/buyerTypeController");
 
 // admin
 router.get("/admin", getAdmin);
@@ -26,11 +32,16 @@ router.put("/customer/:id", authMiddleware, updateCustomer);
 router.delete("/customer/:id", authMiddleware, deleteCustomer);
 router.get("/customer/:id", authMiddleware, getIdCustomer);
 
-
-
 // Gas Stock
 router.post("/add-gas", authMiddleware, addGas);
-router.get("/gas", authMiddleware, history)
-router.get("/current-gas", authMiddleware, getLastStock)
+router.get("/gas", authMiddleware, history);
+router.get("/current-gas", authMiddleware, getLastStock);
+
+// Sale
+router.get("/sale", authMiddleware, getSale);
+router.post("/sale", authMiddleware, storeSale);
+
+// Buyer Type
+router.get("/buyerType", authMiddleware, getBuyer);
 
 module.exports = router;

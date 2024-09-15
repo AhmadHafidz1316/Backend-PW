@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
           gas.restock_date = new Date()
         }
       }
-    }
+    } 
   });
   return gas_stock;
 };
