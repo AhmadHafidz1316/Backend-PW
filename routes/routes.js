@@ -14,6 +14,7 @@ const {
   addGas,
   history,
   getLastStock,
+  getMonthlySales,
 } = require("../controllers/gasController");
 const { getSale, storeSale } = require("../controllers/saleController");
 const { getBuyer } = require("../controllers/buyerTypeController");
@@ -36,6 +37,7 @@ router.get("/customer/:id", authMiddleware, getIdCustomer);
 router.post("/add-gas", authMiddleware, addGas);
 router.get("/gas", authMiddleware, history);
 router.get("/current-gas", authMiddleware, getLastStock);
+router.get("/monthlysales", authMiddleware, getMonthlySales);
 
 // Sale
 router.get("/sale", authMiddleware, getSale);
