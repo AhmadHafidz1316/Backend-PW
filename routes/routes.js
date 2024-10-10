@@ -37,11 +37,12 @@ router.get("/customer/:id", authMiddleware, getIdCustomer);
 router.post("/add-gas", authMiddleware, addGas);
 router.get("/gas", authMiddleware, history);
 router.get("/current-gas", authMiddleware, getLastStock);
-router.get("/monthlysales", authMiddleware, getMonthlySales);
 
 // Sale
 router.get("/sale", authMiddleware, getSale);
 router.post("/sale", authMiddleware, storeSale);
+router.get("/monthlysales", authMiddleware, getMonthlySales);
+
 
 // Buyer Type
 router.get("/buyerType", authMiddleware, getBuyer);

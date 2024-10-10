@@ -41,30 +41,12 @@ exports.storeCustomer = async (req, res) => {
     let {
       nik,
       nama,
-      tmpt_tgl_lahir,
-      jk,
       alamat,
-      rt_rw,
-      kel_desa,
-      kecamatan,
-      agama,
-      status_perkawinan,
-      pekerjaan,
-      warga,
     } = req.body;
     const addCustomer = await customerModel.create({
       nik,
       nama,
-      tmpt_tgl_lahir,
-      jk,
       alamat,
-      rt_rw,
-      kel_desa,
-      kecamatan,
-      agama,
-      status_perkawinan,
-      pekerjaan,
-      warga,
     });
 
     res.status(201).json({

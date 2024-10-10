@@ -18,43 +18,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      tmpt_tgl_lahir: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      jk: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       alamat: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      rt_rw: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      kel_desa: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      kecamatan: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      agama: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      status_perkawinan: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      pekerjaan: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      warga: {
         type: Sequelize.STRING,
         allowNull: false,
       },
