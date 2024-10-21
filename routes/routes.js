@@ -16,7 +16,7 @@ const {
   getLastStock,
   getMonthlySales,
 } = require("../controllers/gasController");
-const { getSale, storeSale } = require("../controllers/saleController");
+const { getSale, storeSale, getDailySales } = require("../controllers/saleController");
 const { getBuyer } = require("../controllers/buyerTypeController");
 
 // admin
@@ -42,6 +42,7 @@ router.get("/current-gas", authMiddleware, getLastStock);
 router.get("/sale", authMiddleware, getSale);
 router.post("/sale", authMiddleware, storeSale);
 router.get("/monthlysales", authMiddleware, getMonthlySales);
+router.get("/dailysales", authMiddleware, getDailySales);
 
 
 // Buyer Type

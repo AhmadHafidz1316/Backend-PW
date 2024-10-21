@@ -1,4 +1,5 @@
 const { gas_stock, sale, customerModel } = require("../models");
+const { Op } = require("sequelize");
 
 exports.getSale = async (req, res) => {
   try {
@@ -83,6 +84,46 @@ exports.storeSale = async (req, res) => {
     res.status(400).json({
       status: 400,
       message: "Error Creating Sale",
+      error: error.message,
+    });
+  }
+};
+
+exports.getDailySales = async (req, res) => {
+  try {
+    // Mendapatkan tanggal hari ini
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    // Menghitung total quantity penjualan untuk hari ini
+    const totalQuantity = await sale.sum('quantity', {
+      where: {
+        sale_date: {
+          [Op.between]: [startOfDay, endOfDay], // Filter berdasarkan tanggal hari ini
+        },
+      },
+    });
+
+    // Jika tidak ada penjualan hari ini
+    if (!totalQuantity) {
+      return res.status(404).json({
+        status: 404,
+        message: "No sales found for today",
+        data: 0, // Mengembalikan 0 jika tidak ada penjualan
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Total quantity of daily sales",
+      total_quantity: totalQuantity, // Mengembalikan total quantity
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
       error: error.message,
     });
   }
