@@ -1,4 +1,4 @@
-const { gas_stock, sale, customerModel } = require("../models");
+const { gas_stock, sale, customerModel, buyer_type } = require("../models");
 const { Op } = require("sequelize");
 
 exports.getSale = async (req, res) => {
@@ -8,7 +8,14 @@ exports.getSale = async (req, res) => {
         {
           model: customerModel,
           as: "customerModel",
-          attributes: ["id", "nama", "buyer_type_id"],
+          attributes: ["id", "nama"],
+          include: [
+            {
+              model: buyer_type, // Model untuk buyer type
+              as: "buyer_type",
+              attributes: ["name"], // Menampilkan nama dari buyer type
+            },
+          ],
         },
       ],
     });
@@ -35,6 +42,7 @@ exports.getSale = async (req, res) => {
     });
   }
 };
+
 
 exports.storeSale = async (req, res) => {
   try {

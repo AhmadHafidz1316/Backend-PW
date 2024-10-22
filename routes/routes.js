@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { authMiddleware } = require("../middleware/userMiddleware");
 const { RegisterAdmin, Login } = require("../controllers/authController");
-const { getAdmin } = require("../controllers/adminController");
+const { getAdmin, addAdmin } = require("../controllers/adminController");
 const {
   getCustomer,
   storeCustomer,
@@ -21,6 +21,7 @@ const { getBuyer } = require("../controllers/buyerTypeController");
 
 // admin
 router.get("/admin", getAdmin);
+router.post("/admin", addAdmin);
 
 // Auth
 router.post("/register", RegisterAdmin);
@@ -33,7 +34,6 @@ router.put("/customer/:id", authMiddleware, updateCustomer);
 router.delete("/customer/:id", authMiddleware, deleteCustomer);
 router.get("/customer/:id", authMiddleware, getIdCustomer);
 
-// Gas Stock
 router.post("/add-gas", authMiddleware, addGas);
 router.get("/gas", authMiddleware, history);
 router.get("/current-gas", authMiddleware, getLastStock);
