@@ -42,11 +42,13 @@ exports.storeCustomer = async (req, res) => {
       nik,
       nama,
       alamat,
+      buyer_type_id
     } = req.body;
     const addCustomer = await customerModel.create({
       nik,
       nama,
       alamat,
+      buyer_type_id
     });
 
     res.status(201).json({

@@ -1,4 +1,4 @@
-const { gas_stock, sale, customerModel, buyer_type } = require("../models");
+const { gas_stock, sale, customerModel, buyer_type, sequelize } = require("../models");
 const { Op } = require("sequelize");
 
 exports.getSale = async (req, res) => {
@@ -126,6 +126,65 @@ exports.getDailySales = async (req, res) => {
       status: 200,
       message: "Total quantity of daily sales",
       total_quantity: totalQuantity, // Mengembalikan total quantity
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+exports.getMonthlySalesByBuyerType = async (req, res) => {
+  try {
+    // Mendapatkan tanggal awal dan akhir bulan ini
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    // Menghitung total penjualan per buyer type dalam sebulan
+    const salesByBuyerType = await sale.findAll({
+      attributes: [
+        [sequelize.fn("SUM", sequelize.col("quantity")), "total_quantity"], // Total quantity per buyer type
+        "customerModel.buyer_type.name", // Ambil nama buyer type
+      ],
+      include: [
+        {
+          model: customerModel,
+          as: "customerModel",
+          attributes: [], // Tidak mengambil atribut customer untuk mencegah pengelompokan berdasarkan customer
+          include: [
+            {
+              model: buyer_type,
+              as: "buyer_type",
+              attributes: [], // Tidak mengambil atribut lainnya dari buyer_type, hanya perlu di GROUP BY
+            },
+          ],
+        },
+      ],
+      where: {
+        sale_date: {
+          [Op.between]: [startOfMonth, endOfMonth], // Filter berdasarkan bulan ini
+        },
+      },
+      group: ["customerModel.buyer_type.name"], // Kelompokkan hanya berdasarkan buyer_type
+    });
+
+    // Jika tidak ada penjualan dalam bulan ini
+    if (salesByBuyerType.length === 0) {
+      return res.status(404).json({
+        status: 404,
+        message: "No sales found for this month",
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Monthly sales by buyer type",
+      data: salesByBuyerType, // Mengembalikan data total pembelian per buyer type
     });
   } catch (error) {
     console.error(error);
