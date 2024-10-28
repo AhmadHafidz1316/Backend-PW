@@ -43,13 +43,13 @@ exports.getSale = async (req, res) => {
   }
 };
 
-
+// Endpoint untuk menambah penjualan tanpa menambah history di gas_stock
 exports.storeSale = async (req, res) => {
   try {
     let { customer_id, sale_date, quantity } = req.body;
 
     // Mengecek apakah customer ada
-    const customerExists = await customerModel.findByPk(customer_id); 
+    const customerExists = await customerModel.findByPk(customer_id);
     if (!customerExists) {
       return res.status(404).json({
         status: 404,
@@ -70,14 +70,14 @@ exports.storeSale = async (req, res) => {
       });
     }
 
-    // Mengurangi current_stock dengan jumlah quantity yang dijual
+    // Mengurangi current_stock tanpa menambah history
     const updatedStock = lastGasStock.current_stock - quantity;
     await lastGasStock.update({ current_stock: updatedStock });
 
     // Menambahkan data penjualan
     const addSale = await sale.create({
-      customer_id: customer_id,
-      quantity: quantity,
+      customer_id,
+      quantity,
       sale_date: sale_date || new Date(),
     });
 
@@ -85,7 +85,7 @@ exports.storeSale = async (req, res) => {
       status: 201,
       message: "Transaction Success",
       data: addSale,
-      current_stock: updatedStock, // Mengembalikan stok terkini setelah transaksi
+      current_stock: updatedStock,
     });
   } catch (error) {
     console.error(error);
@@ -96,6 +96,7 @@ exports.storeSale = async (req, res) => {
     });
   }
 };
+
 
 exports.getDailySales = async (req, res) => {
   try {

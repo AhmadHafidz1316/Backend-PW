@@ -1,5 +1,6 @@
-const { gas_stock, AdminModel, sale } = require("../models");
+const { gas_stock, sale, gas_stock_history, AdminModel } = require("../models");
 const { Op } = require("sequelize");
+const adminmodel = require("../models/adminmodel");
 
 exports.addGas = async (req, res) => {
   try {
@@ -15,6 +16,12 @@ exports.addGas = async (req, res) => {
     }
     const newGasStock = await gas_stock.create({
       current_stock: updated_stock,
+      restock_date: restock_date || new Date(),
+      restocked_by: req.user.id,
+    });
+
+    await gas_stock_history.create({
+      stock_quantity: current_stock,
       restock_date: restock_date || new Date(),
       restocked_by: req.user.id,
     });
@@ -37,7 +44,7 @@ exports.addGas = async (req, res) => {
 
 exports.history = async (req, res) => {
   try {
-    const gas = await gas_stock.findAll({
+    const history = await gas_stock_history.findAll({
       include: [
         {
           model: AdminModel,
@@ -47,7 +54,7 @@ exports.history = async (req, res) => {
       ],
     });
 
-    if (gas.length === 0) {
+    if (history.length === 0) {
       return res.status(404).json({
         status: 404,
         message: "Not found / empty data",
@@ -57,8 +64,8 @@ exports.history = async (req, res) => {
 
     return res.status(200).json({
       status: 200,
-      message: "Data",
-      data: gas,
+      message: "Data Test",
+      data: history,
     });
   } catch (error) {
     console.log(error);
@@ -113,20 +120,35 @@ exports.getMonthlySales = async (req, res) => {
 
     // Array nama bulan
     const monthNames = [
-      "January", "February", "March", "April", "May", "June", 
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
     const currentMonth = monthNames[now.getMonth()]; // Mendapatkan nama bulan saat ini
 
     // Mengambil total quantity yang terjual pada bulan ini
     const totalSales = await sale.findAll({
-      attributes: [[sale.sequelize.fn('SUM', sale.sequelize.col('quantity')), 'total_quantity_sold']], // Menjumlahkan quantity
+      attributes: [
+        [
+          sale.sequelize.fn("SUM", sale.sequelize.col("quantity")),
+          "total_quantity_sold",
+        ],
+      ], // Menjumlahkan quantity
       where: {
         sale_date: {
-          [Op.between]: [startOfMonth, endOfMonth] // Hanya data dalam rentang bulan ini
-        }
-      }
+          [Op.between]: [startOfMonth, endOfMonth], // Hanya data dalam rentang bulan ini
+        },
+      },
     });
 
     // Jika tidak ada penjualan
