@@ -18,6 +18,7 @@ const {
 } = require("../controllers/gasController");
 const { getSale, storeSale, getDailySales, getMonthlySalesByBuyerType } = require("../controllers/saleController");
 const { getBuyer } = require("../controllers/buyerTypeController");
+const { exportDailySalesToExcel, exportWeeklySalesToExcel, exportMonthlySalesToExcel } = require("../controllers/exportController");
 
 // admin
 router.get("/admin", getAdmin);
@@ -45,8 +46,12 @@ router.get("/monthlysales", authMiddleware, getMonthlySales);
 router.get("/dailysales", authMiddleware, getDailySales);
 router.get("/buyertypesale", authMiddleware, getMonthlySalesByBuyerType)
 
-
 // Buyer Type
 router.get("/buyerType", authMiddleware, getBuyer);
+
+// Export Excel
+router.get("/dailyexcel", exportDailySalesToExcel )
+router.get("/weeklyexcel", exportWeeklySalesToExcel )
+router.get("/monthlyexcel", exportMonthlySalesToExcel )
 
 module.exports = router;
