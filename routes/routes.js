@@ -16,7 +16,7 @@ const {
   getLastStock,
   getMonthlySales,
 } = require("../controllers/gasController");
-const { getSale, storeSale, getDailySales, getMonthlySalesByBuyerType } = require("../controllers/saleController");
+const { getSale, storeSale, getDailySales, getMonthlySalesByBuyerType, getSalePDF } = require("../controllers/saleController");
 const { getBuyer } = require("../controllers/buyerTypeController");
 const { exportDailySalesToExcel, exportWeeklySalesToExcel, exportMonthlySalesToExcel } = require("../controllers/exportController");
 
@@ -53,5 +53,8 @@ router.get("/buyerType", authMiddleware, getBuyer);
 router.get("/dailyexcel", exportDailySalesToExcel )
 router.get("/weeklyexcel", exportWeeklySalesToExcel )
 router.get("/monthlyexcel", exportMonthlySalesToExcel )
+
+// Export PDF Pembelian
+router.get("/sale/pdf/:sale_id", getSalePDF);
 
 module.exports = router;

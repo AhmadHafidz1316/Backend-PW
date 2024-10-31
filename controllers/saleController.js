@@ -1,5 +1,125 @@
-const { gas_stock, sale, customerModel, buyer_type, sequelize } = require("../models");
+const {
+  gas_stock,
+  sale,
+  customerModel,
+  buyer_type,
+  sequelize,
+} = require("../models");
 const { Op } = require("sequelize");
+const pdf = require("html-pdf");
+
+// Fungsi untuk membuat template HTML
+const generateHTML = (saleData) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Sales Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; color: #333; }
+        .container { width: 80%; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        .title h1 { color: #28a745; text-align: center; font-size: 2em; margin: 0; }
+        h1.report-title { color: #555; text-align: center; font-size: 1.5em; margin-top: 10px; }
+        .content { margin-top: 20px; line-height: 1.6; }
+        .label { font-weight: bold; color: #555; }
+        .content p { margin: 5px 0; }
+        .content-box { background-color: #e9f5ec; padding: 15px; border-radius: 5px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="title">
+          <h1>Gas Agent</h1>
+        </div>
+        <h1 class="report-title">Kode Pembelian: ${saleData.id}</h1>
+        <div class="content content-box">
+          <p><span class="label">Nama Customer:</span> ${saleData.customerModel.nama}</p>
+          <p><span class="label">Jenis Pembeli:</span> ${saleData.customerModel.buyer_type.name}</p>
+          <p><span class="label">Jumlah:</span> ${saleData.quantity}</p>
+          <p><span class="label">Tanggal Pembelian:</span> ${new Date(saleData.sale_date).toLocaleDateString()}</p>
+        </div>
+        <p><span class="label">Terimakasih sudah membeli gas di agent kami !</span></p>
+      </div>
+    </body>
+    </html>
+  `;
+};
+
+
+exports.getSalePDF = async (req, res) => {
+  try {
+    const { sale_id } = req.params;
+
+    // Ambil data penjualan berdasarkan ID
+    const saleData = await sale.findOne({
+      where: { id: sale_id },
+      include: [
+        {
+          model: customerModel,
+          as: "customerModel",
+          attributes: ["nama"],
+          include: [
+            {
+              model: buyer_type,
+              as: "buyer_type",
+              attributes: ["name"],
+            },
+          ],
+        },
+      ],
+    });
+
+    // Jika data penjualan tidak ditemukan
+    if (!saleData) {
+      return res.status(404).json({
+        status: 404,
+        message: "Sale not found",
+        data: null,
+      });
+    }
+
+    // Hasilkan HTML
+    const htmlContent = generateHTML(saleData);
+
+    // Mengatur opsi untuk PDF
+    const options = {
+      format: 'A6', // Menggunakan ukuran A5
+      border: {
+        top: "10mm", // Atas
+        right: "10mm", // Kanan
+        bottom: "10mm", // Bawah
+        left: "10mm" // Kiri
+      },
+      type: 'pdf', // Tipe dokumen
+    };
+
+    // Menghasilkan PDF
+    pdf.create(htmlContent, options).toBuffer((err, buffer) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({
+          status: 500,
+          message: "Error generating PDF",
+          error: err.message,
+        });
+      }
+
+      // Mengirim PDF sebagai response
+      res.setHeader("Content-Disposition", `attachment; filename="sale_${sale_id}.pdf"`);
+      res.setHeader("Content-Type", "application/pdf");
+      res.send(buffer);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: 500,
+      message: "Error generating PDF",
+      error: error.message,
+    });
+  }
+};
 
 exports.getSale = async (req, res) => {
   try {
@@ -97,7 +217,6 @@ exports.storeSale = async (req, res) => {
   }
 };
 
-
 exports.getDailySales = async (req, res) => {
   try {
     // Mendapatkan tanggal hari ini
@@ -106,7 +225,7 @@ exports.getDailySales = async (req, res) => {
     const endOfDay = new Date(today.setHours(23, 59, 59, 999));
 
     // Menghitung total quantity penjualan untuk hari ini
-    const totalQuantity = await sale.sum('quantity', {
+    const totalQuantity = await sale.sum("quantity", {
       where: {
         sale_date: {
           [Op.between]: [startOfDay, endOfDay], // Filter berdasarkan tanggal hari ini
