@@ -128,7 +128,7 @@ exports.getSale = async (req, res) => {
         {
           model: customerModel,
           as: "customerModel",
-          attributes: ["id", "nama"],
+          attributes: ["id","nik", "nama"],
           include: [
             {
               model: buyer_type, // Model untuk buyer type
