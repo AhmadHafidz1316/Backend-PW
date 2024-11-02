@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      gambar : {
+        type : DataTypes.STRING,
+        allowNull : true,
+      },
       buyer_type_id: {
         type: DataTypes.UUID,
       },

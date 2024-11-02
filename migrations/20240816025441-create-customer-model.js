@@ -22,6 +22,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      gambar: {
+        type: Sequelize.STRING,
+        allowNull: true, 
+      },
       buyer_type_id: {
         type: Sequelize.UUID,
         references: {

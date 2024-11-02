@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.AdminModel, {
         foreignKey: 'restocked_by',
-        as: 'AdminModel c:\Users\nitro\Downloads\voice_26-09-2024_12-49-44.ogg'
+        as: 'AdminModel'
       });
     }
   }

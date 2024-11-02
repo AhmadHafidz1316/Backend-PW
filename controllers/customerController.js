@@ -38,17 +38,15 @@ exports.getCustomer = async (req, res) => {
 
 exports.storeCustomer = async (req, res) => {
   try {
-    let {
-      nik,
-      nama,
-      alamat,
-      buyer_type_id
-    } = req.body;
+    const { nik, nama, alamat, buyer_type_id } = req.body;
+    const gambar = req.file ? req.file.path : null;
+
     const addCustomer = await customerModel.create({
       nik,
       nama,
       alamat,
-      buyer_type_id
+      gambar,
+      buyer_type_id,
     });
 
     res.status(201).json({
@@ -64,6 +62,7 @@ exports.storeCustomer = async (req, res) => {
     });
   }
 };
+
 
 exports.updateCustomer = async (req, res) => {
   try {
