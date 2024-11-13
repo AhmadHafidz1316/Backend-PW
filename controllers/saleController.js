@@ -259,52 +259,70 @@ exports.getDailySales = async (req, res) => {
 
 exports.getMonthlySalesByBuyerType = async (req, res) => {
   try {
-    // Mendapatkan tanggal awal dan akhir bulan ini
-    const today = new Date();
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    // Array nama bulan
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
 
-    // Menghitung total penjualan per buyer type dalam sebulan
-    const salesByBuyerType = await sale.findAll({
-      attributes: [
-        [sequelize.fn("SUM", sequelize.col("quantity")), "total_quantity"], // Total quantity per buyer type
-        "customerModel.buyer_type.name", // Ambil nama buyer type
-      ],
-      include: [
-        {
-          model: customerModel,
-          as: "customerModel",
-          attributes: [], // Tidak mengambil atribut customer untuk mencegah pengelompokan berdasarkan customer
-          include: [
-            {
-              model: buyer_type,
-              as: "buyer_type",
-              attributes: [], // Tidak mengambil atribut lainnya dari buyer_type, hanya perlu di GROUP BY
-            },
-          ],
-        },
-      ],
-      where: {
-        sale_date: {
-          [Op.between]: [startOfMonth, endOfMonth], // Filter berdasarkan bulan ini
-        },
-      },
-      group: ["customerModel.buyer_type.name"], // Kelompokkan hanya berdasarkan buyer_type
-    });
+    // Array untuk menyimpan hasil penjualan tiap bulan
+    const monthlySalesData = [];
 
-    // Jika tidak ada penjualan dalam bulan ini
-    if (salesByBuyerType.length === 0) {
-      return res.status(404).json({
-        status: 404,
-        message: "No sales found for this month",
-        data: null,
+    // Loop untuk mendapatkan penjualan dari Januari hingga Desember
+    for (let month = 0; month < 12; month++) {
+      // Tentukan tanggal awal dan akhir bulan
+      const startOfMonth = new Date(new Date().getFullYear(), month, 1);
+      const endOfMonth = new Date(new Date().getFullYear(), month + 1, 0);
+
+      // Menghitung total penjualan per buyer type untuk bulan tertentu
+      const salesByBuyerType = await sale.findAll({
+        attributes: [
+          [sequelize.fn("SUM", sequelize.col("quantity")), "total_quantity"], // Total quantity per buyer type
+          "customerModel.buyer_type.name", // Ambil nama buyer type
+        ],
+        include: [
+          {
+            model: customerModel,
+            as: "customerModel",
+            attributes: [],
+            include: [
+              {
+                model: buyer_type,
+                as: "buyer_type",
+                attributes: [],
+              },
+            ],
+          },
+        ],
+        where: {
+          sale_date: {
+            [Op.between]: [startOfMonth, endOfMonth],
+          },
+        },
+        group: ["customerModel.buyer_type.name"],
       });
+
+      // Jika tidak ada penjualan pada bulan ini
+      if (salesByBuyerType.length === 0) {
+        monthlySalesData.push({
+          month: monthNames[month],
+          message: "No sales found for this month",
+          sales: null,
+        });
+      } else {
+        // Jika ada penjualan, tambahkan ke array dengan detail penjualan
+        monthlySalesData.push({
+          month: monthNames[month],
+          sales: salesByBuyerType,
+        });
+      }
     }
 
+    // Mengembalikan response dengan data penjualan per bulan dari Januari hingga Desember
     return res.status(200).json({
       status: 200,
       message: "Monthly sales by buyer type",
-      data: salesByBuyerType, // Mengembalikan data total pembelian per buyer type
+      data: monthlySalesData,
     });
   } catch (error) {
     console.error(error);
