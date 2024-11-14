@@ -62,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
         type : DataTypes.STRING,
         allowNull : true,
       },
+      fotoKtp : {
+        type : DataTypes.STRING,
+        allowNull: true,
+      },
       buyer_type_id: {
         type: DataTypes.UUID,
       },

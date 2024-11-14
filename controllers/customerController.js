@@ -39,13 +39,15 @@ exports.getCustomer = async (req, res) => {
 exports.storeCustomer = async (req, res) => {
   try {
     const { nik, nama, alamat, buyer_type_id } = req.body;
-    const gambar = req.file ? req.file.path : null;
+    const gambar = req.files.gambar ? req.files.gambar[0].path : null;
+    const fotoKtp = req.files.fotoKtp ? req.files.fotoKtp[0].path : null;
 
     const addCustomer = await customerModel.create({
       nik,
       nama,
       alamat,
       gambar,
+      fotoKtp,
       buyer_type_id,
     });
 

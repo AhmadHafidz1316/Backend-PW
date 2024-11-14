@@ -41,7 +41,11 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }).fields([
+  { name: "gambar", maxCount: 1 },
+  { name: "fotoKtp", maxCount: 1 },
+]);
+
 
 // admin
 router.get("/admin", getAdmin);
@@ -53,12 +57,7 @@ router.post("/login", Login);
 
 // Customer
 router.get("/customer", authMiddleware, getCustomer);
-router.post(
-  "/customer",
-  authMiddleware,
-  upload.single("gambar"),
-  storeCustomer
-);
+router.post("/customer", authMiddleware, upload, storeCustomer);
 router.put("/customer/:id", authMiddleware, updateCustomer);
 router.delete("/customer/:id", authMiddleware, deleteCustomer);
 router.get("/customer/:id", authMiddleware, getIdCustomer);
