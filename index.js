@@ -3,14 +3,11 @@ const cors = require("cors");
 const morgan = require("morgan");
 const router = require("./routes/routes");
 
-// Konfigurasi multer (opsional, jika ingin menangani file upload)
-
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Untuk menangani form-data
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 app.use("/api", router);
@@ -25,4 +22,4 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
 
-// Ekspor upload agar bisa digunakan di route
+

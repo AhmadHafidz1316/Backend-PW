@@ -34,10 +34,10 @@ const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Folder untuk menyimpan file yang diupload
+    cb(null, "uploads/"); 
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Menambahkan timestamp ke nama file
+    cb(null, Date.now() + path.extname(file.originalname)); 
   },
 });
 
