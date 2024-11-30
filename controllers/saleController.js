@@ -207,6 +207,9 @@ exports.storeSale = async (req, res) => {
       data: addSale,
       current_stock: updatedStock,
     });
+
+    console.log("Sale Date Stored:", sale_date || new Date());
+
   } catch (error) {
     console.error(error);
     res.status(400).json({
@@ -270,9 +273,9 @@ exports.getMonthlySalesByBuyerType = async (req, res) => {
 
     // Loop untuk mendapatkan penjualan dari Januari hingga Desember
     for (let month = 0; month < 12; month++) {
-      // Tentukan tanggal awal dan akhir bulan
-      const startOfMonth = new Date(new Date().getFullYear(), month, 1);
-      const endOfMonth = new Date(new Date().getFullYear(), month + 1, 0);
+      // Tentukan tanggal awal dan akhir bulan dengan UTC
+      const startOfMonth = new Date(Date.UTC(new Date().getFullYear(), month, 1, 0, 0, 0));
+      const endOfMonth = new Date(Date.UTC(new Date().getFullYear(), month + 1, 0, 23, 59, 59, 999));
 
       // Menghitung total penjualan per buyer type untuk bulan tertentu
       const salesByBuyerType = await sale.findAll({

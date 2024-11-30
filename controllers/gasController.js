@@ -115,8 +115,12 @@ exports.getMonthlySales = async (req, res) => {
   try {
     // Mendapatkan tanggal awal dan akhir bulan ini
     const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const startOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0)
+    );
+    const endOfMonth = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999)
+    );
 
     // Array nama bulan
     const monthNames = [
@@ -168,6 +172,9 @@ exports.getMonthlySales = async (req, res) => {
       total_sold: totalSales[0].dataValues.total_quantity_sold,
       month: currentMonth,
     });
+
+    console.log("Start of Month:", startOfMonth);
+    console.log("End of Month:", endOfMonth);
   } catch (error) {
     console.error(error);
     res.status(500).json({
