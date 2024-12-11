@@ -5,9 +5,9 @@ exports.getCustomer = async (req, res) => {
     const customer = await customerModel.findAll({
       include: [
         {
-          model: buyer_type, // Menggunakan model buyerType yang diimport
+          model: buyer_type,
           as: 'buyer_type',
-          attributes: ['id', 'name'],  // Ambil hanya ID dan nama buyer_type
+          attributes: ['id', 'name'],
         },
       ],
     });
@@ -19,6 +19,13 @@ exports.getCustomer = async (req, res) => {
         data: null,
       });
     }
+
+    // Pastikan mengganti backslash dengan slash sebelum mengirimkan path gambar
+    customer.forEach((cust) => {
+      if (cust.gambar) {
+        cust.gambar = cust.gambar.replace(/\\/g, '/');
+      }
+    });
 
     return res.status(200).json({
       status: 200,

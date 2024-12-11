@@ -305,20 +305,21 @@ exports.getMonthlySalesByBuyerType = async (req, res) => {
         group: ["customerModel.buyer_type.name"],
       });
 
-      // Jika tidak ada penjualan pada bulan ini
-      if (salesByBuyerType.length === 0) {
-        monthlySalesData.push({
-          month: monthNames[month],
-          message: "No sales found for this month",
-          sales: null,
-        });
-      } else {
-        // Jika ada penjualan, tambahkan ke array dengan detail penjualan
-        monthlySalesData.push({
-          month: monthNames[month],
-          sales: salesByBuyerType,
-        });
-      }
+      // Jika tidak ada penjualan untuk bulan ini, buat data sales dengan total quantity 0
+      const salesData = salesByBuyerType.length > 0 
+        ? salesByBuyerType.map((sale) => ({
+            buyerType: sale.dataValues["customerModel.buyer_type.name"],
+            totalQuantity: parseInt(sale.dataValues.total_quantity, 10),
+          }))
+        : [{
+            totalQuantity: 0,
+          }];
+
+      // Tambahkan data penjualan bulan ini ke array
+      monthlySalesData.push({
+        month: monthNames[month],
+        sales: salesData,
+      });
     }
 
     // Mengembalikan response dengan data penjualan per bulan dari Januari hingga Desember
